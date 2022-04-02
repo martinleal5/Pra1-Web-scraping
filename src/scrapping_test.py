@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
+sneakerslist = []
 productlinks = []
 for page in range(1, 6):
     r = requests.get(f'https://www.sivasdescalzo.com/es/calzado?p={page}')
@@ -32,3 +34,8 @@ for link in productlinks:
         'description': description
     }
     print(sneakers)
+    sneakerslist.append(sneakers)
+
+df = pd.DataFrame(sneakerslist)
+
+
