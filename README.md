@@ -1,2 +1,5 @@
-# Pra1-Web-scraping
-Trabajo de la asignatura Tipología y ciclo de vidas de los datos, del máster en Ciencia de Datos de la UOC
+# Práctica 1: Web scraping (M2.851)
+
+### Integrantes del grupo:
++ Leal Martínez, Martín ([email](mlealmlm@uoc.edu))
++ Peñalver Miret, Eugenio ([email](epenalverm@uoc.edu))
