@@ -64,7 +64,7 @@ class Scraper:
             }
             print(sneakers)
             self.sneakers_list.append(sneakers)
-            sleep(randint(1, 5))
+            sleep(randint(1, 2))
 
     def get_attributes(self):
         """
@@ -83,7 +83,7 @@ class Scraper:
         """
         df = pd.DataFrame(self.sneakers_list)
         df.to_csv('../data/sneakers.csv', sep=',',
-                  encoding='utf-8', header=['id', 'name', 'model',
+                  encoding='utf-8', header=['name', 'model',
                                             'price', 'discount', 'description'])
         return df
 
