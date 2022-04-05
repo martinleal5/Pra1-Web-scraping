@@ -65,4 +65,4 @@ df.to_csv('data/data.csv',
           sep=',',
           encoding='utf-8',
           header=['name', 'model', 
-                  'actual price', 'old price', 'discount']) 
+                  'actual price', 'old price', 'discount'])
