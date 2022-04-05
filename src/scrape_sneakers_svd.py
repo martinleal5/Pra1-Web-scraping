@@ -5,29 +5,45 @@ from random import randint
 from time import sleep
 
 
-class ScrapeSneakersSVD:
-    sneakerslist = []
-    productlinks = []
+class Scraper:
+    """
+    Class to scrape the sneakers from Sivasdescalzo.com
+    """
+    sneakers_list = []
+    product_links = []
 
-    def set_links(self):
-        for page in range(0, 1):
+    def set_product_links(self):
+        """
+        Function that iterates through the shoe pages, obtaining a file in lxml format.
+        In this file it executes a search by href obtaining the links of each one of the products.
+        """
+        for page in range(0, 10):
             r = requests.get(f'https://www.sivasdescalzo.com/es/calzado?p={page}')
 
             soup = BeautifulSoup(r.content, 'lxml')
+            self.product_list = soup.find_all('div', class_='product-item-info product-card')
 
-            self.productlist = soup.find_all('div', class_='product-item-info product-card')
-
-            for item in self.productlist:
+            for item in self.product_list:
                 for link in item.find_all('a', href=True):
-                    self.productlinks.append(link['href'])
-            sleep(randint(1, 5))
-        return self.productlinks
+                    self.product_links.append(link['href'])
 
-    def get_links(self):
-        return self.productlinks
+            sleep(randint(1, 8))
 
-    def set_attributes(self):
-        for link in self.productlinks:
+    def get_product_links(self):
+        """
+        Product links getter.
+
+        :return: a list with the product links.
+        """
+        return self.product_links
+
+    def set_product_attributes(self):
+        """
+        Function that iterates through the different products obtaining an lmxl file,
+        where it performs a search and extracts its different attributes:
+        [name, model, price, discount, description]
+        """
+        for link in self.product_links:
             r = requests.get(link)
             soup = BeautifulSoup(r.content, 'lxml')
             name = soup.find('span', class_='product-data__brand-name').text
@@ -47,21 +63,33 @@ class ScrapeSneakersSVD:
                 'description': description
             }
             print(sneakers)
-            self.sneakerslist.append(sneakers)
-            sleep(randint(1, 3))
+            self.sneakers_list.append(sneakers)
+            sleep(randint(1, 5))
 
     def get_attributes(self):
-        return self.productlist
+        """
+        Product attributes getter.
 
-    def raw_to_workable_data(self):
-        df = pd.DataFrame(self.sneakerslist)
+        :return: a list with the product attributes.
+        """
+        return self.product_list
+
+    def transform_to_csv(self):
+        """
+        Function that transforms data to pandas DataFrame object and
+        comma separated value.
+
+        :return: a pandas DataFrame object.
+        """
+        df = pd.DataFrame(self.sneakers_list)
         df.to_csv('../data/sneakers.csv', sep=',',
                   encoding='utf-8', header=['id', 'name', 'model',
                                             'price', 'discount', 'description'])
+        return df
 
 
 if __name__ == '__main__':
-    scrape = ScrapeSneakersSVD()
-    scrape.set_links()
-    scrape.set_attributes()
-    scrape.raw_to_workable_data()
+    scrape = Scraper()
+    scrape.set_product_links()
+    scrape.set_product_attributes()
+    scrape.transform_to_csv()
