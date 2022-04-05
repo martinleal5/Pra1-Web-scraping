@@ -9,20 +9,9 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from random import randint
 from time import sleep
+import os  
 
 
-def transform_to_csv(data_frame):
-    """
-    Function that transforms data to pandas DataFrame object and
-    comma separated value.
-
-    :return: a pandas DataFrame object.
-    """
-    df = pd.DataFrame(data_frame)
-    df.to_csv('../data/sneakers.csv', sep=',',
-              encoding='utf-8', header=['id', 'name', 'model',
-                                        'actual price', 'old price', 'discount'])
-    return df
 
 # Creamos una lista en la que introducir la info útil que obtengamos
 sneakers_list = []
@@ -39,6 +28,8 @@ for i in range(1,20):
     for product in product_list:
         name = product.find('a', class_ = 'set-product-storage').text
         model = product.find('a', class_ = 'product-item-link set-product-storage').text
+        # price_list contiene el precio del artículo
+        # En caso de que se le aplique un descuento, contiene el precio actual, el original y el descuento
         price_list = product.find('span', class_ = 'price').text.replace('\xa0€', '').split()
         act_price = price_list[0]
         try:
@@ -65,5 +56,13 @@ for i in range(1,20):
     # Esperamos un tiempo para realizar la siguiente búsqueda y evitar bloqueos
     sleep(randint(1, 4))
 
-# Creamos un csv donde almacenar los datos
-transform_to_csv(sneakers_list)
+# Almacenamos los datos en un data frame
+df = pd.DataFrame(sneakers_list)
+
+# Creamos un directorio donde guardar el dataset en formato csv 
+os.makedirs('data', exist_ok=True)
+df.to_csv('data/data.csv',
+          sep=',',
+          encoding='utf-8',
+          header=['name', 'model', 
+                  'actual price', 'old price', 'discount']) 
