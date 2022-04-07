@@ -61,7 +61,7 @@ df = pd.DataFrame(sneakers_list)
 
 # Creamos un directorio donde guardar el dataset en formato csv 
 os.makedirs('data', exist_ok=True)
-df.to_csv('data/data.csv',
+df.to_csv('data/SVD_calzados.csv',
           sep=',',
           encoding='utf-8',
           header=['name', 'model', 
